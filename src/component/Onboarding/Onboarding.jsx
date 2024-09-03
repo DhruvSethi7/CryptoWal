@@ -2,17 +2,18 @@ import React, { useState } from "react";
 import Button from "../buttons/Button";
 import { generateMnemonic, mnemonicToSeedSync } from "bip39";
 
-function Onboarding({onBoardCompleted}) {
+function Onboarding({ onBoardCompleted }) {
   const [selected, setselected] = useState(false);
   const [creatingWallet, setcreatingWallet] = useState(true);
   const [phrase, setphrase] = useState([]);
   const createWallet = () => {
     setselected(true);
+    setcreatingWallet(true);
     const mnemonic = generateMnemonic();
     const words = mnemonic.split(" ");
     console.log(words);
     console.log(words.length);
-    
+
     setphrase(words);
   };
   const importWallet = () => {};
@@ -35,31 +36,61 @@ function Onboarding({onBoardCompleted}) {
       )}
       {selected && (
         <div>
-            <button onClick={()=>setselected(false)} className="text-2xl">{"<-"}</button>
+          <button onClick={() => setselected(false)} className="text-2xl">
+            {"<-"}
+          </button>
           {creatingWallet && (
             <div className="flex flex-col gap-8 items-center">
-                <div className="text-2xl">Secret Recovery Phrase</div>
-                <div className="flex flex-col items-center">
-                <div className="text-yellow-500 ">This Phrase is the ONLY way to recover your wallet.</div>
-                <div className="text-yellow-500 "> Do NOT share it with anyone!</div>
+              <div className="text-2xl">Secret Recovery Phrase</div>
+              <div className="flex flex-col items-center">
+                <div className="text-yellow-500 ">
+                  This Phrase is the ONLY way to recover your wallet.
                 </div>
-            <div className="text-white grid  w-96 h-48 p-2 grid-cols-3 grid-rows-4 gap-2">
-              {
-            phrase.map((word, index) => (
-                <div className="bg-gray-500 rounded-md flex items-center justify-center" key={index}>{`${index+1}. ${word}`}</div>
-              ))
-              }
-            </div>
-            <button onClick={()=>{
-                navigator.clipboard.writeText(phrase.join(" ")).then(()=>alert("Text Copied to Clipboard"))
-            }}>Copy To Clipboard</button>
-            <Button handler={()=>{
-                const myphrase=phrase.join(" ")
-                localStorage.setItem('webwallet',myphrase)
-                onBoardCompleted(myphrase)}} name={"Continue"}></Button>
+                <div className="text-yellow-500 ">
+                  {" "}
+                  Do NOT share it with anyone!
+                </div>
+              </div>
+              <div className="text-white grid  w-96 h-48 p-2 grid-cols-3 grid-rows-4 gap-2">
+                {phrase.map((word, index) => (
+                  <div
+                    className="bg-gray-500 rounded-md flex items-center justify-center"
+                    key={index}
+                  >{`${index + 1}. ${word}`}</div>
+                ))}
+              </div>
+              <button
+                onClick={() => {
+                  navigator.clipboard
+                    .writeText(phrase.join(" "))
+                    .then(() => alert("Text Copied to Clipboard"));
+                }}
+              >
+                Copy To Clipboard
+              </button>
+              <Button
+                handler={() => {
+                  const myphrase = phrase.join(" ");
+                  localStorage.setItem("webwallet", myphrase);
+                  onBoardCompleted(myphrase);
+                }}
+                name={"Continue"}
+              ></Button>
             </div>
           )}
-          {!creatingWallet && <div></div>}
+          {!creatingWallet && (
+            <div className="flex  mt-10 h-96 flex-col gap-8">
+             
+              <textarea placeholder="Enter your recovery phrase here" className="bg-gray-500 rounded-md text-black p-4" rows="2" cols="3" onChange={(e) => {
+                  setphrase(e.target.value.trim());
+                }}></textarea>
+              <Button handler={()=>{
+                if (phrase!="") {
+                  onBoardCompleted(phrase)
+                }
+              }} name={" Recover Account"}></Button>
+            </div>
+          )}
         </div>
       )}
     </>
