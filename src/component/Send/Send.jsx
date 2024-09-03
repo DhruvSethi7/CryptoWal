@@ -24,7 +24,7 @@ function Send({ backToHome, keypair, connection }) {
 
   async function sendSol() {
     try {
-        const response = await fetch('https://backend-rho-ruddy.vercel.app/send-sol', {
+        const response = await fetch('https://express-server-sandy.vercel.app/send-sol', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
