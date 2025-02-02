@@ -14,7 +14,7 @@ function App() {
   const [sendingSol, setsendingSol] = useState(false)
   const [wallets, setwallets] = useState([]);
   const connection = new Connection(
-    "https://solana-mainnet.g.alchemy.com/v2/L-MI6saZI8ZeAZ0pavXaFHH1J7vC3U5g"
+    "https://solana-mainnet.g.alchemy.com/v2/r3TWagQw-Jt5a3xMIDmoGmYUG2vDmQKx"
   );
   function onBoardCompleted(phrase) {
     generateAccount(phrase);
@@ -43,7 +43,9 @@ function App() {
 
   return (
     <div className="h-screen text-white bg-black flex flex-col justify-center items-center">
+      <h1 className="mb-4  text-sky-400">Welcome to CryptoWal</h1>
       <div className="h-3/4 w-1/3 border-2 border-gray-400 rounded-lg  p-5 flex justify-center items-center">
+      
         {onboarding && <Onboarding onBoardCompleted={onBoardCompleted} />}
         {!onboarding && <>
         {!sendingSol && <Home wallets={wallets} connection={connection} sendSol={()=>setsendingSol(true)}/>}
